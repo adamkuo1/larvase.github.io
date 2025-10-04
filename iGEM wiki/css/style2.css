@@ -1182,3 +1182,20 @@ html {
 .flip-card-back::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.5);
 }
+
+
+/* For embedded PDF */
+embed[type="application/pdf"],
+object[type="application/pdf"],
+iframe {
+    width: 100% !important;
+    min-height: 1000px !important;
+    height: auto !important;
+}
+
+/* Optional: Add zoom controls */
+.pdf-zoom-container {
+    zoom: 1;
+    transform: scale(1);
+    transform-origin: top center;
+}
