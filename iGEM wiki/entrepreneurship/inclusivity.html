@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Larvase 2025</title>
+    <link rel="icon" href="../image/download.jpg" type="image/png">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body>
+    <nav>
+
+        <div class="nav-container">
+            <div class="logo">
+
+                <img class="logo-picture" src="../image/62759.png" alt="Logo">
+                <a href="../home/home.html" class="logo-name"> Larvase Taiwan</a>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="../home/home.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Project</span>
+                    <div class="dropdown">
+                        <a href="../project/projectdescription.html">Project description</a>
+                        <a href="../project/implementation.html">Implementation</a>
+                        <a href="../project/contribution.html">Contribution</a>
+                        <a href="../project/highlights.html">Highlights</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Wet Lab</span>
+                    <div class="dropdown">
+                        <a href="../wetlab/design.html">Design</a>
+                        <a href="../wetlab/engineeringsuccess.html">Engineering Success</a>
+                        <a href="../wetlab/experiments.html">Experiments</a>
+                        <a href="../wetlab/proofofconcept.html">Proof of Concept</a>
+                        <a href="../wetlab/measurements.html">Measurements</a>
+                        <a href="../wetlab/partcollection.html">Part Collection</a>
+                        <a href="../wetlab/safety.html">Safety</a>
+                        <a href="../wetlab/notebook.html">Notebook</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="../drylab/drylab.html" class="nav-link">Dry Lab</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Software</span>
+                    <div class="dropdown">
+                        <a href="../software/syntheticexperimentconstruct.html">Synthetic experiment construct</a>
+                        <a href="../software/model.html">Model</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Human Practices</span>
+                    <div class="dropdown">
+                        <a href="../humanpractices/ihp.html">iHP</a>
+                        <a href="../humanpractices/publicengagement.html">Public Engagement</a>
+                        <a href="../humanpractices/inclusivity.html">Inclusivity</a>
+                        <a href="../humanpractices/governance&ethicalconsiderations.html">Governance & Ethical
+                            Considerations</a>
+                        <a href="../humanpractices/sdgs.html">SDGs</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Entrepreneurship</span>
+                    <div class="dropdown">
+                        <a href="../entrepreneurship/unmetneeds.html">Unmet needs
+                        </a>
+                        <a href="../entrepreneurship/oursolution.html">Our Solution
+                        </a>
+                        <a href="../entrepreneurship/businessmodel.html">Business model
+                        </a>
+                        <a href="../entrepreneurship/businessplan.html">Business plan
+                        </a>
+                        <a href="../entrepreneurship/marketanalysis.html">Market Analysis
+                        </a>
+                        <a href="../entrepreneurship/businesscompetition.html">Business Competition
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Education</span>
+                    <div class="dropdown">
+                        <a href="../education/overview.html">Overview</a>
+                        <a href="../education/learningfromothers.html">Learning from others</a>
+                        <a href="../education/education.html">Education</a>
+                        <a href="../education/teachingmaterials.html">Teaching Materials</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">Team</span>
+                    <div class="dropdown">
+                        <a href="../team/teammembers.html">Team Members</a>
+                        <a href="../team/attributions.html">Attributions</a>
+                        <a href="../team/sponsorspartners.html">Sponsors & Partners</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Menu section -->
+    <section>
+        <div class="mobile-menu-icon" onclick="toggleMobileMenu()">
+            <span id="menu-icon" class="material-symbols-outlined">menu</span>
+        </div>
+
+        <div id="mobile-nav" class="mobile-nav">
+            <div class="mobile-dropdown">
+                <a href="../home/home.html" class="mobile-toggle">Home</a>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Project <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../project/projectdescription.html">Project description</a>
+                    <a href="../project/implementation.html">Implementation</a>
+                    <a href="../project/contribution.html">Contribution</a>
+                    <a href="../project/highlights.html">Highlights</a>
+                </div>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Wet Lab <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../wetlab/design.html">Design</a>
+                    <a href="../wetlab/engineeringsuccess.html">Engineering Success</a>
+                    <a href="../wetlab/experiments.html">Experiments</a>
+                    <a href="../wetlab/proofofconcept.html">Proof of Concept</a>
+                    <a href="../wetlab/measurements.html">Measurements</a>
+                    <a href="../wetlab/partcollection.html">Part Collection</a>
+                    <a href="../wetlab/safety.html">Safety</a>
+                    <a href="../wetlab/notebook.html">Notebook</a>
+                </div>
+            </div>
+            <div class="mobile-dropdown">
+                <a href="../drylab/drylab.html" class="mobile-toggle">Dry Lab</a>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Software <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../software/syntheticexperimentconstruct.html">Synthetic experiment construct</a>
+                    <a href="../software/model.html">Model</a>
+                </div>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Human Practices <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../humanpractices/ihp.html">iHP</a>
+                    <a href="../humanpractices/publicengagement.html">Public Engagement</a>
+                    <a href="../humanpractices/inclusivity.html">Inclusivity</a>
+                    <a href="../humanpractices/governance&ethicalconsiderations.html">Governance & Ethical
+                        Considerations</a>
+                    <a href="../humanpractices/sdgs.html">SDGs</a>
+                </div>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Entrepreneurship <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../entrepreneurship/unmetneeds.html">Unmet needs</a>
+                    <a href="../entrepreneurship/oursolution.html">Our Solution</a>
+                    <a href="../entrepreneurship/businessmodel.html">Business model</a>
+                    <a href="../entrepreneurship/businessplan.html">Business plan</a> <a
+                        href="../entrepreneurship/marketanalysis.html">Market Analysis</a>
+                    <a href="../entrepreneurship/businesscompetition.html">Business Competition</a>
+                </div>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Education <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../education/overview.html">Overview</a>
+                    <a href="../education/learningfromothers.html">Learning from others</a>
+                    <a href="../education/education.html">Education</a>
+                    <a href="../education/teachingmaterials.html">Teaching Materials</a>
+                </div>
+            </div>
+            <div class="mobile-dropdown">
+                <span class="mobile-toggle">Team <span class="arrow-icon">▶</span></span>
+                <div class="mobile-submenu">
+                    <a href="../team/teammembers.html">Team Members</a>
+                    <a href="../team/attributions.html">Attributions</a>
+                    <a href="../team/sponsorspartners.html">Sponsors & Partners</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Section -->
+    <div class="banner-container">
+        <img class="banner" src="../image/unmetneeds_banner.png" alt="unmetneeds_banner">
+        <div class="banner-title-line2">Inclusivity</div>
+    </div>
+    <section class="main">
+        <div style="display: flex; flex-direction: row;">
+            <div class="side-nav">
+                <a href="#Overview" class="side-link">Overview</a>
+                <a href="#Internal Inclusivity" class="side-link">Internal Inclusivity</a>
+                <a href="#External Inclusivity" class="side-link">External Inclusivity</a>
+            </div>
+            <div class="main-content">
+                <!-- <h2 class="big-title">Unmet Needs</h2> -->
+                <div class="section-content">
+                    <h1 id="Overview" class="section-heading">Overview</h1>
+                    <br>
+                    <p class="text">
+                        For us, inclusivity is a guiding principle of our team. We believe inclusivity shapes the way we
+                        work together and how we engage with others. We divided inclusivity into 2 sections: internal
+                        inclusivity and external inclusivity. Separating inclusivity into these two aspects emphasizes
+                        how inclusivity works in practice. The internal inclusivity ensures that members who are not
+                        strongly interested in STEM can also contribute meaningfully to our project. This is the truly
+                        interdisciplinary nature of synthetic biology and creates opportunities for members to grow in
+                        unfamiliar fields. The external inclusivity is promoting synthetic biology and our project to
+                        different age and minority groups and ensuring they can access and benefit from it.
+                    </p>
+                    <br>
+                    <br>
+                    <h1 id="Internal Inclusivity" class="section-heading">Internal Inclusivity</h1>
+                    <h2 class="section-sub-heading">Team inclusivity</h2>
+                    <br>
+                    <p class="text">
+                        • Why is this important for inclusivity?
+                        <br>
+                        <br>
+                        Team inclusivity means each member in the group has a chance to contribute to the project,
+                        regardless of their ability, background, or personality. For us, inclusivity is not only
+                        gathering students from STEM fields but also embracing members interested in design and
+                        education. These diverse voices in our team ensure that the team reflects the interdisciplinary
+                        nature of synthetic biology itself. Moreover, this variety of groups can bring more creative
+                        solutions due to the different perspectives of each person.
+                        <br>
+                        <br>
+                        • What did we do?
+                        <br>
+                        <br>
+                        To practice inclusivity, we divided each member into roles in the team and emphasized the
+                        importance of everyone in our project. For example, we have divided our group into lab, human
+                        practice, design, and website. The lab group focuses on experiments. The human practice group is
+                        responsible for designing education plans and connecting with different stakeholders and
+                        professors. The design group did all the wiki design, promotion video, and social media
+                        management. For the website group, they have no prior knowledge on coding. However, we believe
+                        that in the STEM field, the most important thing is passion and learning. We have decided to
+                        give them the chance to self-learn and be responsible for our wiki.
+                        <br>
+                        <br>
+                        <image src="../image/inclusivity_image1.png" alt="inclusivity_image1"
+                            style="display: block; margin: 0 auto; border-radius: 12px; max-width: 80%;  height: auto; ">
+                            <br>
+                            <br>
+                            To organize the team, we have set up regular team meetings every Saturday. Each group will
+                            present updates, ensuring that technical results, design progress, and education outcomes
+                            are
+                            covered. The meeting facilitators will be our team leader, as it is convenient for our
+                            leader to
+                            integrate everyone’s progress. Furthermore, we held the cross-team workshops where STEM
+                            members
+                            explained scientific concepts to other members, while design members taught lab group
+                            members
+                            how to simplify complex experiment processes into engaging visuals. This exchange reinforced
+                            mutual respect and reduced knowledge barriers between the groups. In this way, we reached a
+                            balance in our team, where even members without lab experience could see their unique
+                            impact,
+                            and lab-focused members recognized the value of communication and creativity.
+                            <br>
+                            <br>
+                    </p>
+                    <image src="../image/inclusivity_image2.png" alt="inclusivity_image2"
+                        style="display: block; margin: 0 auto; border-radius: 12px; max-width: 80%;  height: auto; ">
+                        <br>
+                        <br>
+                        <h2 class="section-sub-heading">Team Building</h2>
+                        <br>
+                        <p class="text">
+                            • Why is this important for inclusivity?
+                            <br>
+                            <br>
+                            Team building activities are especially important for our team because our team is composed
+                            of
+                            teammates with different interests. In a diverse team like ours, communication styles and
+                            skill
+                            sets differ widely. In this situation, we had many misunderstandings and miscommunications.
+                            This
+                            team building is a chance for us to establish a bridge between each other. Our communication
+                            efficiency and information correction rate will increase after people get used to each other
+                            and
+                            become familiar with each other's way of thinking and personality.
+                            <br>
+                            <br>
+                            • What did we do?
+                            <br>
+                            <br>
+                            From August 1st to 3rd, we organized a three-day team-building activity at a villa. Since
+                            the
+                            landscape is near the beach, we held a small iGEM Q&A competition on the beach. We also
+                            distributed the team members randomly into 2 teams to promote interaction and collaboration
+                            between each other. Furthermore, we held storytelling sessions where each member shared
+                            their
+                            motivation for joining iGEM and their reflections until now. These personal stories helped
+                            us
+                            understand each other, creating empathy and appreciation. These team building activities
+                            also
+                            include a small workshop, in which the lab group introduces the experimental protocol and
+                            the
+                            human practice group shares their concepts when they are designing their education plan. The
+                            design team shared the methods they used when they were creating our figure. These
+                            discussions
+                            bring us more creative thought and make us understand everyone’s different ways of thinking.
+                            To
+                            ensure equal participation, we rotated leadership roles so every member had opportunities to
+                            guide group activities. Evening reflection sessions encouraged members to share what they
+                            learned about others, reinforcing the message that every background brought unique value to
+                            the
+                            team. By the end of the camp, we had not only built trust but also created a shared identity
+                            as
+                            a cohesive group.
+                            <br>
+                            <br>
+                            This activity transformed how we collaborated with each other in the future assignments.
+                            Previously, members only interacted with other groups because of the necessary needs. Now we
+                            are
+                            asking more questions and offering input more openly. The lab group gained new knowledge for
+                            creative problem solving, and design and human practice members felt empowered to contribute
+                            to
+                            scientific discussions. As a result, our efficiency obviously increases with fewer
+                            communication
+                            gaps and more innovative solutions. Most importantly, the experience cultivated a sense of
+                            belonging to our own team. Every member realized that inclusivity was not symbolic but truly
+                            between us. Trust and unity are being carried forward into all the project stages.
+                            <br>
+                            <br>
+                            <br>
+
+                        </p>
+                        <h1 id="External Inclusivity" class="section-heading">External Inclusivity</h1>
+                        <h2 class="section-sub-heading">Vietnam</h2>
+                        <br>
+                        <p class="text">
+                            Food insecurity is a global challenge that occurs every day across countries and
+                            communities.
+                            Some areas deal with a lot of leftovers, while others face shortages in daily life. We,
+                            LarVase,
+                            aim to tackle food insecurity directly, expanding the inclusivity of our project beyond the
+                            lab
+                            and even Taiwan, with the hope of sharing our vision with other countries.
+                            <br>
+                            <br>
+                            In Southeast Asia, food insecurity is often experienced from disasters like typhoons and
+                            floods
+                            that damage crops and the fishing industry. At the same time, low-income families that live
+                            in
+                            high-cost-of-living areas struggle with rising food prices and often depend on cheap meals
+                            that
+                            are unhealthy. Thus, we created a rice donation program in Southeast Asia countries like
+                            Vietnam
+                            to help vulnerable communities.
+                            <br>
+                            <br>
+                        </p>
+                        <div style="display:flex; gap:24px; justify-content:center; align-items:center; flex-wrap:wrap; margin:16px 0 8px;">
+                            <img src="../image/inclusivity_image3.png" alt="inclusivity_image3"
+                                style="display:block; width:min(46%,520px); aspect-ratio: 4 / 3; object-fit: cover; height:auto; border-radius:12px;">
+                            <img src="../image/inclusivity_image4.png" alt="inclusivity_image4"
+                                style="display:block; width:min(46%,520px); aspect-ratio: 4 / 3; object-fit: cover; height:auto; border-radius:12px;">
+                        </div>
+                        <P Class="text">
+                        <br>
+                        <br>
+                        “A Little for You, A Lot for Them”
+                        <br>
+                        <br>
+                        To make this happen, we shared our vision with the Taiwanese community and showed them how
+                        they
+                        could join this international project by donating a little bit of money. This led to strong
+                        support for our initiative. With these resources, our team can donate rice to families and
+                        community kitchens that need it.
+                        <br>
+                        <br>
+                        Before the event started, we reached out to their local company, ChauThanhDat, which
+                        generously
+                        offered storage space for the rice and a place for us to rest. We also reached out to local
+                        government officials to estimate how many rice bags we needed to prepare. Other than that,
+                        the
+                        local government also supported us by announcing and promoting this rice donation project.
+                        We
+                        prepared more than 100 large sacks of rice and distributed them across nearly 80
+                        neighborhoods
+                        where families struggled to have stable meals. We reached those most in need, including the
+                        blind, disabled, and elderly individuals.
+                        <br>
+                        <br>
+                        Additionally, we donated 8 sacks of rice to a local charity kitchen that provides meals for
+                        children battling cancer.. According to the founder, she had devoted all she had to these
+                        kids;
+                        all of their parents could not afford the high cost of medication in Vietnam, leaving them
+                        alone. One unforgettable moment was witnessing the unsanitary conditions of the kitchen. The
+                        kitchen is an open cooking area, and all the ingredients were placed on the ground without
+                        packages. The children were lining up to have some lunch outside the kitchen area, quietly
+                        waiting for fried rice that contained simply eggs and ham.
+                        <br>
+                        <br>
+                        Through the rice donation project, we supported over 120 individuals, including families and
+                        residents relying on community kitchens. Families expressed relief at receiving staple food
+                        that
+                        eased their financial strain, while volunteers at the kitchen said our rice helped them
+                        prepare
+                        more consistent meals for marginalized groups. The impact on local people was significant;
+                        they
+                        appreciated that youth from another country recognized their struggles.
+                        For the first time, we’re really diving into the issues that affect people. For our team,
+                        this
+                        experience showed the different aspects of food insecurity, triggered our sense of
+                        responsibility, and reinforced that inclusivity involves a promise to address real needs.
+                        <br>
+                        <br>
+                        Rather than a one-time activity, we see the rice donation project as the beginning of our
+                        outreach.. In the future, we aim to collaborate with NGOs to provide support for vulnerable
+                        communities across the world. By documenting our efforts, we hope to inspire other iGEM
+                        teams to
+                        do projects that truly make an impact on people, ensuring that inclusivity continues to grow
+                        in
+                        both technology and society.
+                        <br>
+                        <br>
+                        </p>
+                        <br>
+                        <div
+                            style="display:flex; gap:24px; justify-content:center; align-items:center; flex-wrap:wrap; margin:16px 0 8px;">
+                            <img src="../image/inclusivity_image5.png" alt="inclusivity_image5"
+                                style="display:block; width:min(46%,520px); aspect-ratio: 4 / 3; object-fit: cover; height:auto; border-radius:12px;">
+                            <img src="../image/inclusivity_image6.png" alt="inclusivity_image6"
+                                style="display:block; width:min(46%,520px); aspect-ratio: 4 / 3; object-fit: cover; height:auto; border-radius:12px;">
+                        </div>
+                        <br>
+                        <br>
+                        <h2 class="section-sub-heading">Sri Lanka</h2>
+                        <br>
+                        <p class="text">
+                            Aside from informing more people about synthetic biology, another mission of our team is to
+                            prioritize inclusivity. To be able to do that, we want to design and deliver a lecture where
+                            everyone can understand what is going on without being confused or intimidated by complex
+                            terms.
+                            We also wanted to make the process of knowledge delivery fun because who would enjoy a
+                            boring
+                            lecture without sleeping out?
+                            <br>
+                            <br>
+                            With these factors in mind, we first list out all the potential concepts that we can deliver
+                            to
+                            our target audience. Through extensive choosing and ruling out all those unfit, eventually
+                            we
+                            found the perfect topics–basic biology terms, biodiversity, and the food chain. These
+                            concepts
+                            are neither too hard nor too easy, and through content adaptation, where we simplify
+                            scientific
+                            terms, they can process the information more efficiently. We also wanted them to work in
+                            teams,
+                            as through collaboration, they can learn from each other and make the learning process more
+                            interactive instead of static.
+                            <br>
+                            <br>
+                            <image src="../image/inclusivity_image7.png" alt="inclusivity_image7"
+                        style="display: block; margin: 0 auto; border-radius: 12px; max-width: 90%;  height: auto; ">
+                            <br>
+                            <br>
+                            In addition to implementing and taking care of those small details in the lecture, we also
+                            encourage students to speak up during the lecture. No matter if they are right or wrong,
+                            hearing
+                            their voice is a crucial part of inclusivity, as being one of the global citizens, we value
+                            contribution more for contribution than intelligence. We wanted to facilitate a safe
+                            environment
+                            that emphasizes curiosity, not correctness. As a result, more students feel empowered and no
+                            longer see science as an unapproachable field, rather, they see it as a field that is
+                            actively
+                            part of life.
+                            <br>
+                            <br>
+                            Reflecting on this experience in Sri Lanka, we feel lucky to have the opportunity to be able
+                            to
+                            educate them and probably open their future to a new domain. However, with the delivery of
+                            the
+                            lecture in mind, there are still many things that could be improved on. First, although
+                            visuals
+                            and accessible language support the concepts that we are trying to deliver, there are still
+                            some
+                            who are unable to keep up the pace and do not understand what we are trying to say. Given
+                            this
+                            issue, we suggest future iGEM teams who are about to do the same things as we are to provide
+                            the
+                            learning materials to be bilingual. On the other hand, we also noticed that while the
+                            majority
+                            of the students were enthusiastic, there were still some quieter participants who were less
+                            vocal. Realizing that introverted people are also an important part of the community, we
+                            suggest
+                            that lecturers provide them with more assistance and guidance to accommodate and adjust to
+                            their
+                            needs to further inclusivity.
+                        </p>
+                        <br>
+                        <br>
+                        <image src="../image/inclusivity_image8.png" alt="inclusivity_image8"
+                        style="display: block; margin: 0 auto; border-radius: 12px; max-width: 80%;  height: auto; ">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h2>Thanks to our supporters!</h2>
+            <ul class="contactus-links">
+                <li><a href="https://www.ntu.edu.tw/"><img src="../image/ntu-logo.png" alt="NTU"
+                            class="footer-icon"></a></li>
+                <li><a href="https://brand.nycu.edu.tw/guidelines"><img src="../image/nycu-logo.png" alt="NYCU"
+                            class="footer-icon footer-icon-large"></a></li>
+                <li><a href="https://web.kcislk.ntpc.edu.tw/"><img src="../image/kcislk-logo.png" alt="KCISlk"
+                            class="footer-icon footer-icon-large"></a></li>
+            </ul>
+            <h2>Contact Us!</h2>
+            <ul class="contactus-links">
+                <li><a href="../instagram.html"><img src="../image/instagram-icon.png" alt="Instagram"
+                            class="footer-icon"></a></li>
+                <li><a href="../gmail.html"><img src="../image/gmail-icon.png" alt="Gmail" class="footer-icon"></a></li>
+                <li><a href="../gitlab.html"><img src="../image/gitlab-icon.png" alt="GitLab" class="footer-icon"></a>
+                </li>
+            </ul>
+            <p>&copy; 2025 Larvase Taiwan KCISLK</p>
+            <p>Designed with VScode by Larvase iGEM in Taiwan.</p>
+        </div>
+    </footer>
+
+
+    </section>
+
+
+
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
