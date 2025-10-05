@@ -1067,13 +1067,14 @@ html {
 .simple-card {
     background: #fff;
     width: 45%;
-    height: 440px;
+    height: 415px;
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 16px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
     padding: 6px;
     text-align: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease; 
+
 }
 
 .simple-card:hover {
@@ -1098,6 +1099,39 @@ html {
     color: #666;
     font-size: 0.95rem;
 }
+
+
+
+
+/* Specific styling for instructor cards */
+.instructors-section .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: flex-start;
+}
+
+.instructors-section .simple-card {
+    width: auto; /* Let content determine width */
+    display: inline-block; /* Shrink to content */
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.instructors-section .simple-card img {
+    display: block;
+    width: auto; /* Natural width */
+    height: auto; /* Natural height */
+    max-width: 350px; /* Optional: limit maximum size */
+    max-height: 400px; /* Optional: limit maximum size */
+}
+
+
 
 /* --------- Responsive Tweaks --------- */
 @media (max-width: 768px) {
