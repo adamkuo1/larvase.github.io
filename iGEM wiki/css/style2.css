@@ -1020,10 +1020,12 @@ html {
 /* --------- Simple Cards (Instructors / Outreach) --------- */
 .simple-card {
     background: #fff;
+    width: 45%;
+    height: 440px;
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 16px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-    padding: 12px;
+    padding: 6px;
     text-align: center;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
