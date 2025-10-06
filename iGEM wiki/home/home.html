@@ -554,7 +554,7 @@
 -->
 
 
-<!-- Hero Section with Manual Scroll Positions -->
+<!-- Hero Section with Manual Scroll Positions
 <section class="section hero visible" style="padding: 0; height: 100vh;">
     <style>
         .scroll-story-wrapper {
@@ -741,6 +741,210 @@
         });
     </script>
 </section>
+-->
+
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevent body scroll, only the wrapper scrolls */
+        font-family: sans-serif;
+        background-color: #F98400;
+    }
+
+    .scroll-story-wrapper {
+        width: 100%;
+        height: 100vh;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        /* Hide scrollbar for a cleaner look */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .scroll-story-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .story-part {
+        width: 100%;
+        height: 100vh;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align image to the top of the container */
+    }
+    
+    .story-image {
+        position: absolute;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Navigation dots */
+    .story-dots {
+        position: fixed;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .dot {
+        width: 12px;
+        height: 12px;
+        margin: 10px 0;
+        background: rgba(255, 107, 53, 0.4);;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        cursor: pointer;
+        display: block;
+        transition: all 0.3s ease;
+    }
+    
+    .dot:hover {
+        background: rgba(255, 107, 53, 0.7); /* This line was changed */
+        transform: scale(1.2)
+    }
+    
+    .dot.active {
+        background: #FF6B35; /* This line was changed */
+        border-color: transparent; /* This line was changed */
+        transform: scale(1.3);
+    }
+</style>
+</head>
+<body>
+
+<!-- This container will be filled with navigation dots by the script -->
+<div class="story-dots" id="dotsContainer"></div>
+
+<!-- This container will be filled with the story sections by the script -->
+<div class="scroll-story-wrapper" id="storyWrapper"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const storyWrapper = document.getElementById('storyWrapper');
+        const dotsContainer = document.getElementById('dotsContainer');
+        
+        // --- IMPORTANT ---
+        // Replace this placeholder with the actual path to your long, single SVG image.
+        const imageSrc = 'homepage_SVG.svg';
+
+        let isUpdating = false; // A flag to prevent the resize function from running too often
+
+        const setupStory = () => {
+            if (isUpdating) return;
+            isUpdating = true;
+
+            // Clear previous setup before rebuilding
+            storyWrapper.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            const tempImg = new Image();
+            tempImg.src = imageSrc;
+
+            // When the image metadata has loaded, we can get its dimensions
+            tempImg.onload = () => {
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
+
+                // Calculate the rendered height of your image, preserving its aspect ratio
+                // as it fits to the viewport width.
+                const aspectRatio = tempImg.naturalHeight / tempImg.naturalWidth;
+                const renderedImageHeight = viewportWidth * aspectRatio;
+
+                // Determine how many 'pages' or 'sections' the image will take up
+                const numSections = Math.ceil(renderedImageHeight / viewportHeight);
+
+                // If there's only one section or less, we don't need navigation dots.
+                dotsContainer.style.display = numSections > 1 ? 'flex' : 'none';
+
+                // Generate the required sections and dots
+                for (let i = 0; i < numSections; i++) {
+                    // Create a story section div
+                    const part = document.createElement('div');
+                    part.className = 'story-part';
+                    
+                    const img = document.createElement('img');
+                    img.src = imageSrc;
+                    img.className = 'story-image';
+                    img.alt = `Story part ${i + 1}`;
+                    
+                    // This is the key part: position the single image inside each section's "frame".
+                    // For section `i`, we shift the image up by `i` times the height of the viewport.
+                    img.style.top = `-${i * viewportHeight}px`;
+
+                    part.appendChild(img);
+                    storyWrapper.appendChild(part);
+
+                    // Create a navigation dot for this section
+                    const dot = document.createElement('span');
+                    dot.className = 'dot';
+                    dot.addEventListener('click', () => {
+                        // When a dot is clicked, scroll the corresponding section into view
+                        storyWrapper.children[i].scrollIntoView({ behavior: 'smooth' });
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+
+                updateActiveDot(); // Set the initial active dot
+                isUpdating = false; // Release the flag
+            };
+
+            tempImg.onerror = () => {
+                storyWrapper.innerHTML = '<p style="color:white; text-align:center; font-size: 24px;">Failed to load story image. Please check the `imageSrc` path in the script.</p>';
+                console.error("Failed to load the story image from:", imageSrc);
+                isUpdating = false;
+            };
+        };
+
+        const updateActiveDot = () => {
+            if (!storyWrapper.children.length) return;
+            
+            const dots = dotsContainer.querySelectorAll('.dot');
+            const scrollPos = storyWrapper.scrollTop;
+            const height = storyWrapper.clientHeight;
+            
+            // Determine the current section based on scroll position
+            const currentSection = Math.round(scrollPos / height);
+
+            // Update which dot is 'active'
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSection);
+            });
+        };
+
+        // --- Event Listeners ---
+
+        // Initial setup when the page loads
+        setupStory();
+
+        // Listen for scroll events on the wrapper to update the active dot
+        storyWrapper.addEventListener('scroll', updateActiveDot);
+
+        // Use a "debounce" mechanism for the resize event to avoid performance issues
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            // Re-run the setup after a short delay once resizing has stopped
+            resizeTimer = setTimeout(setupStory, 250);
+        });
+    });
+</script>
 
 
 
