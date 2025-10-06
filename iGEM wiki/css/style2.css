@@ -1376,3 +1376,80 @@ iframe {
     justify-content: center;
     align-items: flex-start;
 }
+
+
+
+
+
+
+.scroll-story-wrapper {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    -ms-overflow-style: none;  /* Add this for IE/Edge */
+    scrollbar-width: none;  /* Add this for Firefox */
+}
+
+.scroll-story-wrapper::-webkit-scrollbar-thumb {
+   display: none;
+}
+
+
+
+<style>
+    .scroll-story-wrapper {
+        width: 100%;
+        height: 100vh;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .scroll-story-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .story-part {
+        width: 100%;
+        height: 100vh;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .story-image {
+        position: absolute;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        min-height: 1200vh; /* IMPORTANT: Make image tall enough for all sections */
+    }
+
+    /* Fixed positioning - use viewport heights instead of percentages */
+    #part1 .story-image { top: -50vh; }
+    #part2 .story-image { top: -100vh; }
+    #part3 .story-image { top: -200vh; }
+    #part4 .story-image { top: -300vh; }
+    #part5 .story-image { top: -400vh; }
+    #part6 .story-image { top: -500vh; }
+    #part7 .story-image { top: -600vh; }
+    #part8 .story-image { top: -700vh; }
+    #part9 .story-image { top: -800vh; }
+    #part10 .story-image { top: -900vh; }
+    #part11 .story-image { top: -1000vh; }
+    #part12 .story-image { top: -1100vh; }
+
+    /* Rest of your styles... */
+</style>

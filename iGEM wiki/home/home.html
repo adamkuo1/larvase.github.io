@@ -237,7 +237,9 @@
             </div>
         </section>
 
-        <!-- Hero Section -->
+
+        
+        <!-- Hero Section 
         <section class="section hero visible">
             <div class="section-content">
                 <h1 class="hero-title">Welcome to Larvasse iGEM 2025 project</h1>
@@ -253,7 +255,504 @@
             <div class="scroll-indicator"></div>
         </section>
 
-        <!-- Sentences -->
+    -->
+
+
+
+        <!-- Hero Section with Scroll Story 
+<section class="section hero visible" style="padding: 0; height: 100vh;">
+    <style>
+        .scroll-story-wrapper {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        
+        .scroll-story-wrapper::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .scroll-story-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .scroll-story-wrapper::-webkit-scrollbar-thumb {
+            background: #FF6B35;
+            border-radius: 5px;
+        }
+        
+        .story-part {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .story-image {
+            position: absolute;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            min-height: 400vh;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        #part1 .story-image { top: 0; }
+        #part2 .story-image { top: -100vh; }
+        #part3 .story-image { top: -200vh; }
+        #part4 .story-image { top: -300vh; }
+
+        /* Navigation dots */
+        .story-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            margin: 15px 0;
+            background: rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: block;
+        }
+        
+        .dot:hover {
+            background: rgba(255, 107, 53, 0.6);
+        }
+        
+        .dot.active {
+            background: #FF6B35;
+        }
+    </style>
+
+    <div class="story-dots">
+        <span class="dot active" onclick="document.getElementById('part1').scrollIntoView({behavior: 'smooth'})"></span>
+        <span class="dot" onclick="document.getElementById('part2').scrollIntoView({behavior: 'smooth'})"></span>
+        <span class="dot" onclick="document.getElementById('part3').scrollIntoView({behavior: 'smooth'})"></span>
+        <span class="dot" onclick="document.getElementById('part4').scrollIntoView({behavior: 'smooth'})"></span>
+    </div>
+
+    <div class="scroll-story-wrapper" id="storyWrapper">
+        <div class="story-part" id="part1">
+            <img src="homepage.png" class="story-image" alt="Just Budit Story">
+        </div>
+        <div class="story-part" id="part2">
+            <img src="homepage.png" class="story-image" alt="Just Budit Story">
+        </div>
+        <div class="story-part" id="part3">
+            <img src="homepage.png" class="story-image" alt="Just Budit Story">
+        </div>
+        <div class="story-part" id="part4">
+            <img src="homepage.png" class="story-image" alt="Just Budit Story">
+        </div>
+    </div>
+
+    <script>
+        // Update dots on scroll
+        const wrapper = document.getElementById('storyWrapper');
+        const dots = document.querySelectorAll('.dot');
+        
+        wrapper.addEventListener('scroll', () => {
+            const scrollPos = wrapper.scrollTop;
+            const height = wrapper.clientHeight;
+            const currentSection = Math.round(scrollPos / height);
+            
+            dots.forEach((dot, index) => {
+                if (index === currentSection) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</section>
+
+-->
+
+
+<!-- Hero Section with Full Scroll Story 
+<section class="section hero visible" style="padding: 0; height: 100vh;">
+    <style>
+        .scroll-story-wrapper {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            -ms-overflow-style: none;  /* Add this for IE/Edge */
+            scrollbar-width: none;  /* Add this for Firefox */
+        }
+        
+        .scroll-story-wrapper::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .scroll-story-wrapper::-webkit-scrollbar-thumb {
+            background: #FF6B35;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .story-part {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .story-image {
+            position: absolute;
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Navigation dots */
+        .story-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            margin: 10px 0;
+            background: rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .dot:hover {
+            background: rgba(255, 107, 53, 0.6);
+            transform: scale(1.2);
+        }
+        
+        .dot.active {
+            background: #FF6B35;
+            transform: scale(1.3);
+        }
+
+        /* Loading message */
+        .loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #FF6B35;
+        }
+    </style>
+
+    <div class="story-dots" id="storyDots"></div>
+
+    <div class="scroll-story-wrapper" id="storyWrapper">
+        <div class="loading-message">Loading story...</div>
+    </div>
+
+    <script>
+        // Create sections based on image height
+        const img = new Image();
+        img.src = 'homepage.png'; // CHANGE THIS TO YOUR IMAGE
+        
+        img.onload = function() {
+            const wrapper = document.getElementById('storyWrapper');
+            const dotsContainer = document.getElementById('storyDots');
+            
+            // Calculate how many viewport heights the image needs
+            const imageAspectRatio = img.height / img.width;
+            const viewportWidth = window.innerWidth;
+            const imageDisplayHeight = viewportWidth * imageAspectRatio;
+            const viewportHeight = window.innerHeight;
+            const numberOfSections = Math.ceil(imageDisplayHeight / viewportHeight);
+            
+            // Clear wrapper
+            wrapper.innerHTML = '';
+            
+            // Create sections dynamically
+            for (let i = 0; i < numberOfSections; i++) {
+                // Create section
+                const section = document.createElement('div');
+                section.className = 'story-part';
+                section.id = 'part' + (i + 1);
+                
+                // Create image
+                const imgElement = document.createElement('img');
+                imgElement.src = 'homepage.png'; // CHANGE THIS TO YOUR IMAGE
+                imgElement.className = 'story-image';
+                imgElement.style.top = (-i * 100) + 'vh';
+                imgElement.style.minHeight = (numberOfSections * 100) + 'vh';
+                
+                section.appendChild(imgElement);
+                wrapper.appendChild(section);
+                
+                // Create dot
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = function() {
+                    section.scrollIntoView({behavior: 'smooth'});
+                };
+                dotsContainer.appendChild(dot);
+            }
+            
+            // Update dots on scroll
+            wrapper.addEventListener('scroll', () => {
+                const scrollPos = wrapper.scrollTop;
+                const height = wrapper.clientHeight;
+                const currentSection = Math.round(scrollPos / height);
+                
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach((dot, index) => {
+                    if (index === currentSection) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            });
+            
+            console.log('Created ' + numberOfSections + ' sections for the image');
+        };
+        
+        img.onerror = function() {
+            document.querySelector('.loading-message').innerHTML = 
+                'Image not found!<br>Please add your-infographic.png to the folder';
+        };
+    </script>
+</section>
+
+-->
+
+<!-- Hero Section with Manual Scroll Positions -->
+<section class="section hero visible" style="padding: 0; height: 100vh;">
+    <style>
+        .scroll-story-wrapper {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .scroll-story-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .story-part {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .story-image {
+            position: absolute;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Manually set where each section shows the image */
+        #part1 .story-image { top: -15%; }
+        #part2 .story-image { top: -115%; }    /* Adjust this */
+        #part3 .story-image { top: -215%; }    /* Adjust this */
+        #part4 .story-image { top: -315%; }    /* Adjust this */
+        #part5 .story-image { top: -415%; }    /* Adjust this */
+        #part6 .story-image { top: -515%; }    /* Adjust this */
+        #part7 .story-image { top: -615%; }    /* Adjust this */
+        #part8 .story-image { top: -715%; }    /* Adjust this */
+        #part9 .story-image { top: -815%; }    /* Adjust this */
+        #part10 .story-image { top: -915%; }   /* Adjust this */
+        #part11 .story-image { top: -1015%; }  /* Adjust this */
+        #part12 .story-image { top: -1115%; }  /* Adjust this */
+
+        /* Navigation dots */
+        .story-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            margin: 10px 0;
+            background: rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .dot:hover {
+            background: rgba(255, 107, 53, 0.6);
+            transform: scale(1.2);
+        }
+        
+        .dot.active {
+            background: #FF6B35;
+            transform: scale(1.3);
+        }
+    </style>
+
+    <div class="story-dots">
+        <span class="dot active" onclick="scrollToSection(0)"></span>
+        <span class="dot" onclick="scrollToSection(1)"></span>
+        <span class="dot" onclick="scrollToSection(2)"></span>
+        <span class="dot" onclick="scrollToSection(3)"></span>
+        <span class="dot" onclick="scrollToSection(4)"></span>
+        <span class="dot" onclick="scrollToSection(5)"></span>
+        <span class="dot" onclick="scrollToSection(6)"></span>
+        <span class="dot" onclick="scrollToSection(7)"></span>
+        <span class="dot" onclick="scrollToSection(8)"></span>
+        <span class="dot" onclick="scrollToSection(9)"></span>
+        <span class="dot" onclick="scrollToSection(10)"></span>
+        <span class="dot" onclick="scrollToSection(11)"></span>
+    </div>
+
+    <div class="scroll-story-wrapper" id="storyWrapper">
+        <!-- Section 1 -->
+        <div class="story-part" id="part1">
+            <img src="homepage.png" class="story-image" alt="Section 1">
+        </div>
+        
+        <!-- Section 2 -->
+        <div class="story-part" id="part2">
+            <img src="homepage.png" class="story-image" alt="Section 2">
+        </div>
+        
+        <!-- Section 3 -->
+        <div class="story-part" id="part3">
+            <img src="homepage.png" class="story-image" alt="Section 3">
+        </div>
+        
+        <!-- Section 4 -->
+        <div class="story-part" id="part4">
+            <img src="homepage.png" class="story-image" alt="Section 4">
+        </div>
+        
+        <!-- Section 5 -->
+        <div class="story-part" id="part5">
+            <img src="homepage.png" class="story-image" alt="Section 5">
+        </div>
+        
+        <!-- Section 6 -->
+        <div class="story-part" id="part6">
+            <img src="homepage.png" class="story-image" alt="Section 6">
+        </div>
+        
+        <!-- Section 7 -->
+        <div class="story-part" id="part7">
+            <img src="homepage.png" class="story-image" alt="Section 7">
+        </div>
+        
+        <!-- Section 8 -->
+        <div class="story-part" id="part8">
+            <img src="homepage.png" class="story-image" alt="Section 8">
+        </div>
+        
+        <!-- Section 9 -->
+        <div class="story-part" id="part9">
+            <img src="homepage.png" class="story-image" alt="Section 9">
+        </div>
+        
+        <!-- Section 10 -->
+        <div class="story-part" id="part10">
+            <img src="homepage.png" class="story-image" alt="Section 10">
+        </div>
+        
+        <!-- Section 11 -->
+        <div class="story-part" id="part11">
+            <img src="homepage.png" class="story-image" alt="Section 11">
+        </div>
+        
+        <!-- Section 12 -->
+        <div class="story-part" id="part12">
+            <img src="homepage.png" class="story-image" alt="Section 12">
+        </div>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('storyWrapper');
+        const sections = document.querySelectorAll('.story-part');
+        const dots = document.querySelectorAll('.dot');
+        
+        function scrollToSection(index) {
+            sections[index].scrollIntoView({behavior: 'smooth'});
+        }
+        
+        wrapper.addEventListener('scroll', () => {
+            const scrollPos = wrapper.scrollTop;
+            const height = wrapper.clientHeight;
+            const currentSection = Math.round(scrollPos / height);
+            
+            dots.forEach((dot, index) => {
+                if (index === currentSection) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Sentences
         <section>
             <h1 class="sentences"> Sentence 1
             </h1>
@@ -264,9 +763,9 @@
             <h1 class="sentences">Sentence 4
             </h1>
         </section>
+    -->
 
-
-        <!-- Project Goal -->
+        <!-- Project Goal
         <section class="section about" id="about">
             <div class="section-content">
                 <h2 class="section-title">Project Goal</h2>
@@ -293,7 +792,7 @@
             </div>
         </section>
 
-        <!-- Project Section -->
+        <!-- Project Section
         <section class="section project" id="project">
             <div class="section-content">
                 <h2 class="section-title">Our Vision</h2>
@@ -305,7 +804,7 @@
             </div>
         </section>
 
-        <!-- Science Section -->
+        <!-- Science Section 
         <section class="section science" id="science">
             <div class="section-content">
                 <h2 class="section-title">Some Numbers</h2>
@@ -332,7 +831,7 @@
             </div>
         </section>
 
-        <!-- Impact Section -->
+        <!-- Impact Section 
         <section class="section impact" id="impact">
             <div class="section-content">
                 <h2 class="section-title">Creating Change</h2>
@@ -347,7 +846,7 @@
             </div>
         </section>
 
-        <!-- Footer Section -->
+        <!-- Footer Section 
         <footer class="footer">
             <div class="footer-content">
                 <h2>Thanks to our supporters!</h2>
@@ -373,7 +872,7 @@
 
     </section>
 
-
+-->
 
 
     <script src="../js/script.js"></script>

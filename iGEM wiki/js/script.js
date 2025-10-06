@@ -266,3 +266,69 @@ document.querySelectorAll('.nav-link').forEach(link => {
 
   ready(reveal);
 })();
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollContainer = document.querySelector('.scroll-container');
+    const navLinks = document.querySelectorAll('.side-nav a');
+    const sections = document.querySelectorAll('.scroll-point'); // Target the scroll-points
+    const fullGraphic = document.querySelector('.full-graphic'); // Reference to the actual image
+
+    // Function to update active navigation link
+    const updateActiveNav = () => {
+        let currentSectionIndex = 0;
+        
+        sections.forEach((section, index) => {
+            // Calculate the absolute position of the scroll point within the document
+            // Then subtract the scrollContainer's current scroll position to get its relative position
+            const sectionAbsoluteTop = section.offsetTop; // Position relative to its positioned parent (.scroll-container)
+            const relativeTop = sectionAbsoluteTop - scrollContainer.scrollTop;
+
+            // Check if the section's start is within the top half of the viewport
+            // Adjust this threshold as needed for when you want a section to become "active"
+            if (relativeTop <= window.innerHeight / 2 && relativeTop > -section.offsetHeight / 2) {
+                currentSectionIndex = index;
+            }
+        });
+
+        navLinks.forEach((link, index) => {
+            if (index === currentSectionIndex) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    };
+
+    // Handle smooth scrolling for navigation links
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                // Calculate target scroll position relative to the scrollContainer
+                // This is the top of the scroll-point element
+                const targetScrollPosition = targetElement.offsetTop;
+
+                scrollContainer.scrollTo({
+                    top: targetScrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Update active nav link on scroll
+    scrollContainer.addEventListener('scroll', updateActiveNav);
+
+    // Initial update on page load
+    updateActiveNav();
+});
+
