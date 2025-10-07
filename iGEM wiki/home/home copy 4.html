@@ -238,7 +238,611 @@
         </section>
 
 
-        
+
+        <style>
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+                overflow-y: auto;
+                /* Prevent body scroll, only the wrapper scrolls */
+                font-family: sans-serif;
+                background-color: #F98400;
+            }
+
+            .scroll-story-wrapper {
+                width: 100%;
+                height: 100vh;
+                overflow-y: scroll;
+                scroll-snap-type: y mandatory;
+                -webkit-overflow-scrolling: touch;
+                position: relative;
+                /* Hide scrollbar for a cleaner look */
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .scroll-story-wrapper::-webkit-scrollbar {
+                display: none;
+            }
+
+            .story-part {
+                width: 100%;
+                height: 100vh;
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                /* Align image to the top of the container */
+            }
+
+            #footer-overlay {
+                position: fixed;
+                inset: 0;
+                background: #ff8b1a;
+                display: none;
+                align-items: flex-start;
+                justify-content: center;
+                overflow-y: auto;
+                padding: 4rem 1.5rem;
+                z-index: 2000;
+            }
+
+            #footer-overlay.is-open {
+                display: flex;
+            }
+
+            #footer-overlay .footer {
+                width: min(1200px, 100%);
+                margin: 0 auto;
+            }
+
+            #footer-close {
+                position: sticky;
+                top: 0;
+                align-self: flex-end;
+                background: transparent;
+                border: none;
+                color: #fff;
+                font-size: 2rem;
+                cursor: pointer;
+                margin-bottom: 1.5rem;
+            }
+
+            .story-image {
+                position: absolute;
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* Navigation dots */
+            .story-dots {
+                position: fixed;
+                right: 30px;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 100;
+                display: flex;
+                flex-direction: column;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .dot {
+                width: 12px;
+                height: 12px;
+                margin: 10px 0;
+                background: rgba(255, 107, 53, 0.4);
+                ;
+                border: 2px solid transparent;
+                border-radius: 50%;
+                cursor: pointer;
+                display: block;
+                transition: all 0.3s ease;
+            }
+
+            .dot:hover {
+                background: rgba(255, 107, 53, 0.7);
+                /* This line was changed */
+                transform: scale(1.2)
+            }
+
+            .dot.active {
+                background: #FF6B35;
+                /* This line was changed */
+                border-color: transparent;
+                /* This line was changed */
+                transform: scale(1.3);
+            }
+        </style>
+        </head>
+
+        <body>
+
+            <!-- This container will be filled with navigation dots by the script -->
+            <div class="story-dots" id="dotsContainer"></div>
+
+            <!-- This container will be filled with the story sections by the script -->
+            <div class="scroll-story-wrapper" id="storyWrapper"></div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const storyWrapper = document.getElementById('storyWrapper');
+                    const dotsContainer = document.getElementById('dotsContainer');
+
+                    // --- IMPORTANT ---
+                    // Replace this placeholder with the actual path to your long, single SVG image.
+                    const imageSrc = 'homepage.png';
+                    const footerOverlay = document.getElementById('footer-overlay');
+                    const footerClose = document.getElementById('footer-close');
+                    let footerVisible = false;
+                    let footerOpenTimeout = null;
+                    let overlayTouchStartY = null;
+
+                    let isUpdating = false; // A flag to prevent the resize function from running too often
+
+                    const setupStory = () => {
+                        if (isUpdating) return;
+                        isUpdating = true;
+
+                        hideFooter();
+                        if (footerOpenTimeout) {
+                            clearTimeout(footerOpenTimeout);
+                            footerOpenTimeout = null;
+                        }
+
+                        // Clear previous setup before rebuilding
+                        storyWrapper.innerHTML = '';
+                        dotsContainer.innerHTML = '';
+
+                        const tempImg = new Image();
+                        tempImg.src = imageSrc;
+
+                        // When the image metadata has loaded, we can get its dimensions
+                        tempImg.onload = () => {
+                            const viewportHeight = window.innerHeight;
+                            const viewportWidth = window.innerWidth;
+
+                            // Calculate the rendered height of your image, preserving its aspect ratio
+                            // as it fits to the viewport width.
+                            // Calculate the rendered height of your image
+                            const aspectRatio = tempImg.naturalHeight / tempImg.naturalWidth;
+                            const renderedImageHeight = viewportWidth * aspectRatio;
+
+                            // Determine how many sections are needed
+                            const numSections = Math.ceil(renderedImageHeight / viewportHeight);
+
+                            // Generate the required sections and dots
+                            for (let i = 0; i < numSections; i++) {
+                                const part = document.createElement('div');
+                                part.className = 'story-part';
+
+                                const img = document.createElement('img');
+                                img.src = imageSrc;
+                                img.className = 'story-image';
+                                img.alt = `Story part ${i + 1}`;
+
+                                // Position the image for this section
+                                const offset = i * viewportHeight;
+                                img.style.top = `-${offset}px`;
+
+                                // For the last section, adjust height if needed
+                                if (i === numSections - 1) {
+                                    // Calculate remaining height for last section
+                                    const remainingHeight = renderedImageHeight - (i * viewportHeight);
+                                    if (remainingHeight < viewportHeight) {
+                                        part.style.height = `${remainingHeight}px`;
+                                        part.style.minHeight = `${remainingHeight}px`;
+                                    }
+                                }
+
+                                part.appendChild(img);
+                                storyWrapper.appendChild(part);
+
+                                // Create navigation dot
+                                const dot = document.createElement('span');
+                                dot.className = 'dot';
+                                dot.addEventListener('click', () => {
+                                    storyWrapper.children[i].scrollIntoView({ behavior: 'smooth' });
+                                });
+                                dotsContainer.appendChild(dot);
+                            }
+
+
+
+                            // Find this closing brace of the for loop:
+                            // <-- This closes the for loop that creates image sections
+
+                            // ADD THIS CODE RIGHT AFTER THAT CLOSING BRACE:
+
+                            // Create footer section as a regular scrollable section
+                            // Create footer section as a regular scrollable section
+                            const footerSection = document.createElement('div');
+                            footerSection.className = 'story-part footer-section';
+                            footerSection.style.height = 'auto';
+                            footerSection.style.minHeight = 'auto';
+                            footerSection.style.background = '#F98400';  // Orange background
+                            footerSection.style.display = 'flex';
+                            footerSection.style.alignItems = 'center';
+                            footerSection.style.justifyContent = 'center';
+                            footerSection.style.padding = '0';  // Remove padding
+                            footerSection.style.scrollSnapAlign = 'start';
+
+                            footerSection.innerHTML = `
+                                <footer class="footer" style="width: 100%; background: transparent; padding: 4rem 1.5rem; text-align: center;">
+                                    <div class="footer-content" style="color: white;">
+                                        <h2 style="font-size: 3.2rem; color: white;" class="footer-heading">With gratitude to all our supporters!</h2>
+                                        <ul class="contactus-links supporters" style="list-style: none; padding: 0; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin: 2rem 0;">
+                                            <li><a href="https://www.ntu.edu.tw/"><img src="../image/ntu-logo.png" alt="National Taiwan University logo" class="footer-icon" style="height: 42px; width: auto;"></a></li>
+                                            <li><a href="https://brand.nycu.edu.tw/guidelines"><img src="../image/nycu-logo.png" alt="NYCU logo" class="footer-icon" style="height: 42px; width: auto;"></a></li>
+                                            <li><a href="https://web.kcislk.ntpc.edu.tw/"><img src="../image/kcislk-logo.png" alt="KCISLK logo" class="footer-icon" style="height: 42px; width: auto;"></a></li>
+                                        </ul>
+                                        <h2 style="font-size: 3.2rem; color: white;" class="footer-heading">Contact us!</h2>
+                                        <ul class="contactus-links contact" style="list-style: none; padding: 0; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin: 2rem 0;">
+                                            <li><a href="https://www.instagram.com/larvase_igem/"><img src="../image/instagram-icon.png" alt="Instagram" class="footer-icon" style="height: 42px; width: auto;"></a></li>
+                                            <li><a href="mailto:larvase2025@gmail.com"><img src="../image/gmail-icon.png" alt="Gmail" class="footer-icon" style="height: 42px; width: auto;"></a></li>
+                                            <li><a href="https://gitlab.igem.org/2025/kcislk-taiwan"><img src="../image/gitlab-icon.png" alt="GitLab" class="footer-icon" style="height: 42px; width: auto;"></a></li>
+                                        </ul>
+                                        <br>
+                                        <p class="footer-note" style="font-size: 0.9rem; color: #fff; margin-top: 1rem;">&copy; 2025 KCISLK-Taiwan · Content on this site is licensed under a Creative Commons Attribution 4.0 International License.</p>
+                                        <p class="footer-note" style="font-size: 0.9rem; color: #fff;">The repository used to create this website is available at <a href="https://gitlab.igem.org/2025/kcislk-taiwan" style="color: #fff; text-decoration: underline;">gitlab.igem.org</a></p>
+                                    </div>
+                                </footer>
+                            `;
+
+                            storyWrapper.appendChild(footerSection);
+
+                            // Add a navigation dot for the footer
+                            const footerDot = document.createElement('span');
+                            footerDot.className = 'dot';
+                            footerDot.addEventListener('click', () => {
+                                footerSection.scrollIntoView({ behavior: 'smooth' });
+                            });
+                            dotsContainer.appendChild(footerDot);
+
+                            // Then continue with the existing code:
+                            updateActiveDot(); // This line already exists
+
+
+
+
+
+                            //updateActiveDot(); // Set the initial active dot
+                            //maybeTriggerFooter();
+                            isUpdating = false; // Release the flag
+                        };
+
+                        tempImg.onerror = () => {
+                            storyWrapper.innerHTML = '<p style="color:white; text-align:center; font-size: 24px;">Failed to load story image. Please check the `imageSrc` path in the script.</p>';
+                            console.error("Failed to load the story image from:", imageSrc);
+                            isUpdating = false;
+                        };
+                    };
+                    const updateActiveDot = () => {
+                        if (!storyWrapper.children.length) return;
+
+                        const dots = dotsContainer.querySelectorAll('.dot');
+                        const scrollPos = storyWrapper.scrollTop;
+                        const height = storyWrapper.clientHeight;
+
+                        // Determine the current section based on scroll position
+                        const approxIndex = scrollPos / height;
+                        const maxIndex = dots.length - 1;
+                        const currentSection = Math.min(maxIndex, Math.round(approxIndex));
+
+                        dots.forEach((dot, index) => {
+                            dot.classList.toggle('active', index === currentSection);
+                        });
+                    };
+
+                    const maybeTriggerFooter = () => {
+                        if (!footerOverlay) {
+                            return;
+                        }
+                        const maxScroll = storyWrapper.scrollHeight - storyWrapper.clientHeight;
+                        if (maxScroll <= 0) {
+                            hideFooter();
+                            return;
+                        }
+
+                        const atBottom = storyWrapper.scrollTop >= maxScroll - 1;
+                        if (!footerVisible && atBottom) {
+                            if (!footerOpenTimeout) {
+                                footerOpenTimeout = setTimeout(() => {
+                                    footerOpenTimeout = null;
+                                    showFooter();
+                                }, 150);
+                            }
+                        } else {
+                            if (footerOpenTimeout) {
+                                clearTimeout(footerOpenTimeout);
+                                footerOpenTimeout = null;
+                            }
+                            const buffer = Math.max(80, storyWrapper.clientHeight * 0.1);
+                            if (footerVisible && storyWrapper.scrollTop <= maxScroll - buffer) {
+                                hideFooter();
+                            }
+                        }
+                    };
+
+                    // --- Event Listeners ---
+
+                    // Initial setup when the page loads
+                    setupStory();
+
+                    // Listen for scroll events on the wrapper to update the active dot
+                    storyWrapper.addEventListener('scroll', () => {
+                        updateActiveDot();
+                        //maybeTriggerFooter();
+                    });
+
+                    // Use a "debounce" mechanism for the resize event to avoid performance issues
+                    let resizeTimer;
+                    window.addEventListener('resize', () => {
+                        clearTimeout(resizeTimer);
+                        // Re-run the setup after a short delay once resizing has stopped
+                        resizeTimer = setTimeout(setupStory, 250);
+                    });
+
+                    function showFooter() {
+                        if (!footerOverlay || footerVisible) {
+                            return;
+                        }
+                        if (footerOpenTimeout) {
+                            clearTimeout(footerOpenTimeout);
+                            footerOpenTimeout = null;
+                        }
+                        footerVisible = true;
+                        footerOverlay.classList.add('is-open');
+                        footerOverlay.setAttribute('aria-hidden', 'false');
+                        storyWrapper.style.pointerEvents = 'none';
+                        storyWrapper.style.overflow = 'hidden';
+                    }
+
+                    function hideFooter() {
+                        if (!footerOverlay || !footerVisible) {
+                            return;
+                        }
+                        if (footerOpenTimeout) {
+                            clearTimeout(footerOpenTimeout);
+                            footerOpenTimeout = null;
+                        }
+                        footerVisible = false;
+                        footerOverlay.classList.remove('is-open');
+                        footerOverlay.setAttribute('aria-hidden', 'true');
+                        storyWrapper.style.pointerEvents = '';
+                        storyWrapper.style.overflow = '';
+                        footerOverlay.scrollTo({ top: 0 });
+                        updateActiveDot();
+                    }
+
+                    storyWrapper.addEventListener('wheel', (event) => {
+                        if (!footerOverlay) {
+                            return;
+                        }
+                        const maxScroll = storyWrapper.scrollHeight - storyWrapper.clientHeight;
+                        if (!footerVisible && storyWrapper.scrollTop >= maxScroll - 1 && event.deltaY > 0) {
+                            event.preventDefault();
+                            showFooter();
+                        } else if (footerVisible && event.deltaY < 0) {
+                            event.preventDefault();
+                            hideFooter();
+                        }
+                    }, { passive: false });
+
+                    if (footerOverlay) {
+                        footerOverlay.addEventListener('wheel', (event) => {
+                            if (!footerVisible) {
+                                return;
+                            }
+                            if (event.deltaY < 0 && footerOverlay.scrollTop <= 0) {
+                                event.preventDefault();
+                                hideFooter();
+                            }
+                        }, { passive: false });
+
+                        footerOverlay.addEventListener('touchstart', (event) => {
+                            if (!footerVisible) {
+                                return;
+                            }
+                            overlayTouchStartY = event.touches[0].clientY;
+                        }, { passive: true });
+
+                        footerOverlay.addEventListener('touchmove', (event) => {
+                            if (!footerVisible || overlayTouchStartY === null) {
+                                return;
+                            }
+                            const diff = event.touches[0].clientY - overlayTouchStartY;
+                            if (diff > 50 && footerOverlay.scrollTop <= 0) {
+                                hideFooter();
+                                overlayTouchStartY = null;
+                            }
+                        }, { passive: true });
+
+                        footerOverlay.addEventListener('touchend', () => {
+                            overlayTouchStartY = null;
+                        }, { passive: true });
+                    }
+
+                    if (footerOverlay) {
+                        footerOverlay.addEventListener('click', (event) => {
+                            if (event.target === footerOverlay) {
+                                hideFooter();
+                            }
+                        });
+                    }
+
+                    if (footerClose) {
+                        footerClose.addEventListener('click', hideFooter);
+                    }
+
+                    window.addEventListener('keydown', (event) => {
+                        if (event.key === 'Escape') {
+                            hideFooter();
+                        }
+                    });
+                });
+            </script>
+
+
+
+    </section>
+
+
+    <!--
+    <div id="footer-overlay" aria-hidden="true">
+        <button id="footer-close" aria-label="Close footer">&times;</button>
+        <footer class="footer">
+            <div class="footer-content">
+                <h2 style="font-size: 3.2rem" class="footer-heading">With gratitude to all our supporters!</h2>
+                <ul class="contactus-links supporters">
+                    <li><a href="https://www.ntu.edu.tw/"><img src="../image/ntu-logo.png"
+                                alt="National Taiwan University logo" class="footer-icon"></a></li>
+                    <li><a href="https://brand.nycu.edu.tw/guidelines"><img src="../image/nycu-logo.png"
+                                alt="NYCU logo" class="footer-icon"></a></li>
+                    <li><a href="https://web.kcislk.ntpc.edu.tw/"><img src="../image/kcislk-logo.png"
+                                alt="KCISLK logo" class="footer-icon"></a></li>
+                </ul>
+                <h2 style="font-size: 3.2rem" class="footer-heading">Contact us!</h2>
+                <ul class="contactus-links contact">
+                    <li><a href="https://www.instagram.com/larvase_igem/"><img src="../image/instagram-icon.png"
+                                alt="Instagram" class="footer-icon"></a></li>
+                    <li><a href="mailto:larvase2025@gmail.com"><img src="../image/gmail-icon.png" alt="Gmail"
+                                class="footer-icon"></a></li>
+                    <li><a href="https://gitlab.igem.org/2025/kcislk-taiwan"><img src="../image/gitlab-icon.png"
+                                alt="GitLab" class="footer-icon"></a>
+                    </li>
+                </ul>
+                <br>
+                <p class="footer-note">&copy; 2025 KCISLK-Taiwan · Content on this site is licensed under a Creative
+                    Commons Attribution 4.0 International License.</p>
+                <p class="footer-note">The repository used to create this website is available at <a
+                        href="https://gitlab.igem.org/2025/kcislk-taiwan">gitlab.igem.org</a></p>
+            </div>
+        </footer>
+    </div>
+
+    -->
+
+    
+
+
+
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+            <!-- Sentences
+        <section>
+            <h1 class="sentences"> Sentence 1
+            </h1>
+            <h1 class="sentences"> Sentence 2
+            </h1>
+            <h1 class="sentences"> Sentence 3
+            </h1>
+            <h1 class="sentences">Sentence 4
+            </h1>
+        </section>
+    
+
+            <!-- Project Goal
+        <section class="section about" id="about">
+            <div class="section-content">
+                <h2 class="section-title">Project Goal</h2>
+                <p class="section-subtitle">subtitle here or else i don't know what to put</p>
+
+                <div class="about-grid">
+                    <div class="about-card">
+                        <h3>first thing here</h3>
+                        <p>Thanks for creating a profile with CollegeAdvisor.com! We're excited to be part of your
+                            admissions journey.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>than the second thing</h3>
+                        <p>Thanks for creating a profile with CollegeAdvisor.com! We're excited to be part of your
+                            admissions journey.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>and the last thing is</h3>
+                        <p>Thanks for creating a profile with CollegeAdvisor.com! We're excited to be part of your
+                            admissions journey.</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+
+        <section class="section project" id="project">
+            <div class="section-content">
+                <h2 class="section-title">Our Vision</h2>
+                <p class="section-subtitle">our vision is to make the world a better place</p>
+
+                <p style="font-size: 3rem">words</p>
+                <p style="font-size: 3rem; margin-top: 40px">words</p>
+                <p style="font-size: 3rem; margin-top: 40px">words</p>
+            </div>
+        </section>
+
+         Science Section 
+        <section class="section science" id="science">
+            <div class="section-content">
+                <h2 class="section-title">Some Numbers</h2>
+                <p class="section-subtitle">subtitle here or else put something else</p>
+
+                <div class="science-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">87%</span>
+                        <span class="stat-label">Brain activities</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">People survived</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3%</span>
+                        <span class="stat-label">of the people are happy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">42</span>
+                        <span class="stat-label">days of suffering</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section 
+        <section class="section impact" id="impact">
+            <div class="section-content">
+                <h2 class="section-title">Creating Change</h2>
+                <p class="section-subtitle">And another subtitle, might be the last one</p>
+
+                <p style="font-size: 1.3rem; color: #515154; line-height: 1.6; max-width: 700px; margin: 2rem auto;">
+                    白日依山盡，黃河入海流。 欲窮千里目，更上一層樓。
+                <div class="cta-buttons">
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="cta-button cta-secondary">Donate Us
+                        🙏</a>
+                </div>
+            </div>
+        </section>-->
+
+            <!--Footer Section -->
+
+
+
         <!-- Hero Section 
         <section class="section hero visible">
             <div class="section-content">
@@ -276,7 +880,7 @@
         }
         
         .scroll-story-wrapper::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: 1f1f#f1;
         }
         
         .scroll-story-wrapper::-webkit-scrollbar-thumb {
@@ -290,7 +894,8 @@
             scroll-snap-align: start;
             scroll-snap-stop: always;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -385,7 +990,7 @@
 -->
 
 
-<!-- Hero Section with Full Scroll Story 
+        <!-- Hero Section with Full Scroll Story 
 <section class="section hero visible" style="padding: 0; height: 100vh;">
     <style>
         .scroll-story-wrapper {
@@ -415,7 +1020,8 @@
             scroll-snap-align: start;
             scroll-snap-stop: always;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -554,7 +1160,7 @@
 -->
 
 
-<!-- Hero Section with Manual Scroll Positions
+        <!-- Hero Section with Manual Scroll Positions
 <section class="section hero visible" style="padding: 0; height: 100vh;">
     <style>
         .scroll-story-wrapper {
@@ -578,7 +1184,8 @@
             scroll-snap-align: start;
             scroll-snap-stop: always;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -742,375 +1349,3 @@
     </script>
 </section>
 -->
-
-
-<style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        overflow: hidden; /* Prevent body scroll, only the wrapper scrolls */
-        font-family: sans-serif;
-        background-color: #F98400;
-    }
-
-    .scroll-story-wrapper {
-        width: 100%;
-        height: 100vh;
-        overflow-y: scroll;
-        scroll-snap-type: y mandatory;
-        -webkit-overflow-scrolling: touch;
-        position: relative;
-        /* Hide scrollbar for a cleaner look */
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    
-    .scroll-story-wrapper::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .story-part {
-        width: 100%;
-        height: 100vh;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start; /* Align image to the top of the container */
-    }
-    
-    .story-image {
-        position: absolute;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    /* Navigation dots */
-    .story-dots {
-        position: fixed;
-        right: 30px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-    
-    .dot {
-        width: 12px;
-        height: 12px;
-        margin: 10px 0;
-        background: rgba(255, 107, 53, 0.4);;
-        border: 2px solid transparent;
-        border-radius: 50%;
-        cursor: pointer;
-        display: block;
-        transition: all 0.3s ease;
-    }
-    
-    .dot:hover {
-        background: rgba(255, 107, 53, 0.7); /* This line was changed */
-        transform: scale(1.2)
-    }
-    
-    .dot.active {
-        background: #FF6B35; /* This line was changed */
-        border-color: transparent; /* This line was changed */
-        transform: scale(1.3);
-    }
-</style>
-</head>
-<body>
-
-<!-- This container will be filled with navigation dots by the script -->
-<div class="story-dots" id="dotsContainer"></div>
-
-<!-- This container will be filled with the story sections by the script -->
-<div class="scroll-story-wrapper" id="storyWrapper"></div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const storyWrapper = document.getElementById('storyWrapper');
-        const dotsContainer = document.getElementById('dotsContainer');
-        
-        // --- IMPORTANT ---
-        // Replace this placeholder with the actual path to your long, single SVG image.
-        const imageSrc = 'homepage_SVG.svg';
-
-        let isUpdating = false; // A flag to prevent the resize function from running too often
-
-        const setupStory = () => {
-            if (isUpdating) return;
-            isUpdating = true;
-
-            // Clear previous setup before rebuilding
-            storyWrapper.innerHTML = '';
-            dotsContainer.innerHTML = '';
-
-            const tempImg = new Image();
-            tempImg.src = imageSrc;
-
-            // When the image metadata has loaded, we can get its dimensions
-            tempImg.onload = () => {
-                const viewportHeight = window.innerHeight;
-                const viewportWidth = window.innerWidth;
-
-                // Calculate the rendered height of your image, preserving its aspect ratio
-                // as it fits to the viewport width.
-                const aspectRatio = tempImg.naturalHeight / tempImg.naturalWidth;
-                const renderedImageHeight = viewportWidth * aspectRatio;
-
-                // Determine how many 'pages' or 'sections' the image will take up
-                const numSections = Math.ceil(renderedImageHeight / viewportHeight);
-
-                // If there's only one section or less, we don't need navigation dots.
-                dotsContainer.style.display = numSections > 1 ? 'flex' : 'none';
-
-                // Generate the required sections and dots
-                for (let i = 0; i < numSections; i++) {
-                    // Create a story section div
-                    const part = document.createElement('div');
-                    part.className = 'story-part';
-                    
-                    const img = document.createElement('img');
-                    img.src = imageSrc;
-                    img.className = 'story-image';
-                    img.alt = `Story part ${i + 1}`;
-                    
-                    // This is the key part: position the single image inside each section's "frame".
-                    // For section `i`, we shift the image up by `i` times the height of the viewport.
-                    img.style.top = `-${i * viewportHeight}px`;
-
-                    part.appendChild(img);
-                    storyWrapper.appendChild(part);
-
-                    // Create a navigation dot for this section
-                    const dot = document.createElement('span');
-                    dot.className = 'dot';
-                    dot.addEventListener('click', () => {
-                        // When a dot is clicked, scroll the corresponding section into view
-                        storyWrapper.children[i].scrollIntoView({ behavior: 'smooth' });
-                    });
-                    dotsContainer.appendChild(dot);
-                }
-
-                updateActiveDot(); // Set the initial active dot
-                isUpdating = false; // Release the flag
-            };
-
-            tempImg.onerror = () => {
-                storyWrapper.innerHTML = '<p style="color:white; text-align:center; font-size: 24px;">Failed to load story image. Please check the `imageSrc` path in the script.</p>';
-                console.error("Failed to load the story image from:", imageSrc);
-                isUpdating = false;
-            };
-        };
-
-        const updateActiveDot = () => {
-            if (!storyWrapper.children.length) return;
-            
-            const dots = dotsContainer.querySelectorAll('.dot');
-            const scrollPos = storyWrapper.scrollTop;
-            const height = storyWrapper.clientHeight;
-            
-            // Determine the current section based on scroll position
-            const currentSection = Math.round(scrollPos / height);
-
-            // Update which dot is 'active'
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSection);
-            });
-        };
-
-        // --- Event Listeners ---
-
-        // Initial setup when the page loads
-        setupStory();
-
-        // Listen for scroll events on the wrapper to update the active dot
-        storyWrapper.addEventListener('scroll', updateActiveDot);
-
-        // Use a "debounce" mechanism for the resize event to avoid performance issues
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            // Re-run the setup after a short delay once resizing has stopped
-            resizeTimer = setTimeout(setupStory, 250);
-        });
-    });
-</script>
-
-
-<footer class="footer">
-    <div class="footer-content">
-        <h2 style="font-size: 3.2rem" class="footer-heading">With gratitude to all our supporters!</h2>
-        <ul class="contactus-links supporters">
-            <li><a href="https://www.ntu.edu.tw/"><img src="../image/ntu-logo.png"
-                        alt="National Taiwan University logo" class="footer-icon"></a></li>
-            <li><a href="https://brand.nycu.edu.tw/guidelines"><img src="../image/nycu-logo.png" alt="NYCU logo"
-                        class="footer-icon"></a></li>
-            <li><a href="https://web.kcislk.ntpc.edu.tw/"><img src="../image/kcislk-logo.png" alt="KCISLK logo"
-                        class="footer-icon"></a></li>
-        </ul>
-        <h2 style="font-size: 3.2rem" class="footer-heading">Contact us!</h2>
-        <ul class="contactus-links contact">
-            <li><a href="https://www.instagram.com/larvase_igem/"><img src="../image/instagram-icon.png"
-                        alt="Instagram" class="footer-icon"></a></li>
-            <li><a href="mailto:larvase2025@gmail.com"><img src="../image/gmail-icon.png" alt="Gmail"
-                        class="footer-icon"></a></li>
-            <li><a href="https://gitlab.igem.org/2025/kcislk-taiwan"><img src="../image/gitlab-icon.png"
-                        alt="GitLab" class="footer-icon"></a>
-            </li>
-        </ul>
-        <br>
-        <p class="footer-note">&copy; 2025 KCISLK-Taiwan · Content on this site is licensed under a Creative Commons
-            Attribution 4.0 International License.</p>
-        <p class="footer-note">The repository used to create this website is available at <a
-                href="https://gitlab.igem.org/2025/kcislk-taiwan">gitlab.igem.org</a></p>
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- Sentences
-        <section>
-            <h1 class="sentences"> Sentence 1
-            </h1>
-            <h1 class="sentences"> Sentence 2
-            </h1>
-            <h1 class="sentences"> Sentence 3
-            </h1>
-            <h1 class="sentences">Sentence 4
-            </h1>
-        </section>
-    -->
-
-        <!-- Project Goal
-        <section class="section about" id="about">
-            <div class="section-content">
-                <h2 class="section-title">Project Goal</h2>
-                <p class="section-subtitle">subtitle here or else i don't know what to put</p>
-
-                <div class="about-grid">
-                    <div class="about-card">
-                        <h3>first thing here</h3>
-                        <p>Thanks for creating a profile with CollegeAdvisor.com! We're excited to be part of your
-                            admissions journey.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>than the second thing</h3>
-                        <p>Thanks for creating a profile with CollegeAdvisor.com! We're excited to be part of your
-                            admissions journey.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>and the last thing is</h3>
-                        <p>Thanks for creating a profile with CollegeAdvisor.com! We're excited to be part of your
-                            admissions journey.</p>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </section>
-
-        <!-- Project Section
-        <section class="section project" id="project">
-            <div class="section-content">
-                <h2 class="section-title">Our Vision</h2>
-                <p class="section-subtitle">our vision is to make the world a better place</p>
-
-                <p style="font-size: 3rem">words</p>
-                <p style="font-size: 3rem; margin-top: 40px">words</p>
-                <p style="font-size: 3rem; margin-top: 40px">words</p>
-            </div>
-        </section>
-
-        <!-- Science Section 
-        <section class="section science" id="science">
-            <div class="section-content">
-                <h2 class="section-title">Some Numbers</h2>
-                <p class="section-subtitle">subtitle here or else put something else</p>
-
-                <div class="science-stats">
-                    <div class="stat-item">
-                        <span class="stat-number">87%</span>
-                        <span class="stat-label">Brain activities</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">6</span>
-                        <span class="stat-label">People survived</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">3%</span>
-                        <span class="stat-label">of the people are happy</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">42</span>
-                        <span class="stat-label">days of suffering</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Impact Section 
-        <section class="section impact" id="impact">
-            <div class="section-content">
-                <h2 class="section-title">Creating Change</h2>
-                <p class="section-subtitle">And another subtitle, might be the last one</p>
-
-                <p style="font-size: 1.3rem; color: #515154; line-height: 1.6; max-width: 700px; margin: 2rem auto;">
-                    白日依山盡，黃河入海流。 欲窮千里目，更上一層樓。
-                <div class="cta-buttons">
-                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="cta-button cta-secondary">Donate Us
-                        🙏</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer Section 
-        <footer class="footer">
-            <div class="footer-content">
-                <h2>Thanks to our supporters!</h2>
-                <ul class="contactus-links">
-                    <li><a href="https://www.ntu.edu.tw/"><img src="../image/ntu-logo.png" alt="NTU"
-                                class="footer-icon"></a></li>
-                    <li><a href="https://brand.nycu.edu.tw/guidelines"><img src="../image/nycu-logo.png" alt="NYCU"
-                                class="footer-icon footer-icon-large"></a></li>
-                    <li><a href="https://web.kcislk.ntpc.edu.tw/"><img src="../image/kcislk-logo.png" alt="KCISlk"
-                                class="footer-icon footer-icon-large"></a></li>
-                </ul>
-                <h2>Contact Us!</h2>
-                <ul class="contactus-links">
-                    <li><a href="#"><img src="../image/instagram-icon.png" alt="Instagram" class="footer-icon"></a></li>
-                    <li><a href="#"><img src="../image/gmail-icon.png" alt="Gmail" class="footer-icon"></a></li>
-                    <li><a href="#"><img src="../image/gitlab-icon.png" alt="GitLab" class="footer-icon"></a></li>
-                </ul>
-                <p>&copy; 2025 Larvase Taiwan KCISLK</p>
-                <p>Designed with VScode by Larvase iGEM in Taiwan.</p>
-            </div>
-        </footer>
-
-
-    </section>
-
--->
-
-
-    <script src="../js/script.js"></script>
-</body>
-
-</html>
